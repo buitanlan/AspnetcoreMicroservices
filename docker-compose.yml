@@ -1,0 +1,70 @@
+version: '3.9'
+
+services:
+  ocelotapigateway:
+    image: ${DOCKER_REGISTRY-}ocelotapigateway
+    build:
+      context: .
+      dockerfile: src/ApiGateways/OcelotApiGateway/Dockerfile
+
+  webhealthstatus:
+    image: ${DOCKER_REGISTRY-}webhealthstatus
+    build:
+      context: .
+      dockerfile: src/WebApps/WebHealthStatus/Dockerfile
+
+
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: src/Services/Basket.API/Dockerfile
+
+
+  customer.api:
+    image: ${DOCKER_REGISTRY-}customerapi
+    build:
+      context: .
+      dockerfile: src/Services/Customer.API/Dockerfile
+
+
+  inventory.product.api:
+    image: ${DOCKER_REGISTRY-}inventoryproductapi
+    build:
+      context: .
+      dockerfile: src/Services/Inventory.Product.API/Dockerfile
+
+
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: src/Services/Ordering.API/Dockerfile
+
+
+  product.api:
+    image: ${DOCKER_REGISTRY-}productapi
+    build:
+      context: .
+      dockerfile: src/Services/Product.API/Dockerfile
+
+
+  hangfire.api:
+    image: ${DOCKER_REGISTRY-}hangfireapi
+    build:
+      context: .
+      dockerfile: src/Services/Hangfire.API/Dockerfile
+
+  
+  sqlserverdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+networks:
+  default:
+    name: microservices
+    driver: bridge
+    
+volumes:
+  sqlserver_data:
+  name: sqlserver_data
+    
