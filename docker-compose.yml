@@ -55,9 +55,37 @@ services:
       context: .
       dockerfile: src/Services/Hangfire.API/Dockerfile
 
-  
-  sqlserverdb:
+#database section
+  orderdb:
     image: mcr.microsoft.com/mssql/server:2022-latest
+  
+  productdb: 
+    image: mysql:8.0.32
+    
+  customerdb: 
+    image: postgres:alpine3.17
+    
+  basketdb:
+    image: redis
+  
+  inventorydb:
+    image: mongo
+    
+#infrastructure section
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    
+  portainer: 
+    image: portainer/portainer-ce
+    
+  elasticsearch:
+    image: elasticsearch:7.17.9
+  
+  kibana:
+    image: kibana:7.17.9
 
 networks:
   default:
@@ -66,5 +94,18 @@ networks:
     
 volumes:
   sqlserver_data:
-  name: sqlserver_data
+    name: sqlserver_data
+  mysql_data:
+    name: mysql_data
+  postgres_data:
+    name: postgres_data
+  elasticsearch_data:
+    name: elasticsearch_data
+  jaeger_data:
+    name: jaeger_data
+  mongo_data:
+    name: mongo_data
+  pgadmin_data:
+    name: pgadmin_data
+  
     
