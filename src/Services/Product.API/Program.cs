@@ -1,31 +1,22 @@
 using Common.Logging;
+using Product.API.Extensions;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog(Serilogger.Configuration);
+
     
 Log.Information("Starting Product API up");
 try
 {
     // Add services to the container.
-    builder.Services.AddControllers();
-  
+    builder.Host.UseSerilog(Serilogger.Configuration); 
+    builder.Configuration.AddAppConfigurations();
+    builder.Services.AddInfrastructure();
 
     var app = builder.Build();
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
-    app.UseHttpsRedirection();
-
-    app.UseAuthorization();
-
-    app.MapControllers();
+    
+    app.UseInfrastructure();
 
     app.Run();
 }
