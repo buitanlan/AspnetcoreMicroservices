@@ -2,6 +2,6 @@ namespace Contracts.Domains.Interfaces;
 
 public interface IDateTracking
 {
-    DateTimeOffset CreateDate { get; set; }
+    DateTimeOffset CreatedDate { get; set; }
     DateTimeOffset? LastModifiedDate { get; set; }
 }

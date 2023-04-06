@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Contracts.Domains;
 
 namespace Product.API.Entities;
-public class CatalogProduct: EntityAuditBase<long>
+public class CatalogProduct: EntityAuditBase<int>
 {
     [Required]
     [Column(TypeName = "varchar(150)")] 

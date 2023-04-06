@@ -12,7 +12,7 @@ try
     // Add services to the container.
     builder.Host.UseSerilog(Serilogger.Configuration); 
     builder.Configuration.AddAppConfigurations();
-    builder.Services.AddInfrastructure();
+    builder.Services.AddInfrastructure(builder.Configuration);
 
     var app = builder.Build();
     
