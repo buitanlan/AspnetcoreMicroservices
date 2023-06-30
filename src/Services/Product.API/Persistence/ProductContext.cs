@@ -4,15 +4,8 @@ using Product.API.Entities;
 
 namespace Product.API.Persistence;
 
-public class ProductContext: DbContext
+public class ProductContext(DbContextOptions<ProductContext> options) : DbContext(options)
 {
-    public ProductContext(DbContextOptions<ProductContext> options) : base(options)
-    {
-        
-    }
-    
-    public DbSet<CatalogProduct> Products { get; set; }
-
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
     {
         var modified = ChangeTracker.Entries()

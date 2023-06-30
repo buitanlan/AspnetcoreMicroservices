@@ -6,22 +6,13 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.Common;
 
-public class RepositoryBaseAsync<T, K, TContext> : IRepositoryBaseAsync<T, K, TContext>
+public class RepositoryBaseAsync<T, K, TContext>(TContext context, IUnitOfWork<TContext> unitOfWork) : IRepositoryBaseAsync<T, K, TContext>
     where T : EntityBase<K>
     where TContext : DbContext
 {
-    private readonly TContext _context;
-    private readonly IUnitOfWork<TContext> _unitOfWork;
-    
-    public RepositoryBaseAsync(TContext context, IUnitOfWork<TContext> unitOfWork)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(_context));
-        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(_unitOfWork));
-    }
-
     public IQueryable<T> FindAll(bool trackChanges = false)
     {
-        return !trackChanges ? _context.Set<T>().AsNoTracking() : _context.Set<T>();
+        return !trackChanges ? context.Set<T>().AsNoTracking() : context.Set<T>();
     }
 
     public IQueryable<T> FindAll(bool trackChanges = false, params Expression<Func<T, object>>[] includeProperties)
@@ -34,7 +25,7 @@ public class RepositoryBaseAsync<T, K, TContext> : IRepositoryBaseAsync<T, K, TC
 
     public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false)
     {
-        return !trackChanges ? _context.Set<T>().Where(expression).AsNoTracking() : _context.Set<T>().Where(expression);
+        return !trackChanges ? context.Set<T>().Where(expression).AsNoTracking() : context.Set<T>().Where(expression);
     }
 
     public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false, params Expression<Func<T, object>>[] includeProperties)
@@ -56,60 +47,60 @@ public class RepositoryBaseAsync<T, K, TContext> : IRepositoryBaseAsync<T, K, TC
 
     public async Task<K> CreateAsync(T entity)
     {
-        await _context.Set<T>().AddAsync(entity);
+        await context.Set<T>().AddAsync(entity);
         return entity.Id;
     }
 
     public async Task<IList<K>> CreateListAsync(IEnumerable<T> entities)
     {
-        await _context.Set<T>().AddRangeAsync(entities);
+        await context.Set<T>().AddRangeAsync(entities);
         return entities.Select(x => x.Id).ToList();
     }
 
     public Task UpdateAsync(T entity)
     {
-        if (_context.Entry(entity).State == EntityState.Unchanged)
+        if (context.Entry(entity).State == EntityState.Unchanged)
             return Task.CompletedTask;
-        T exist = _context.Set<T>().Find(entity.Id);
-        _context.Entry(exist).CurrentValues.SetValues(entity);
+        T exist = context.Set<T>().Find(entity.Id);
+        context.Entry(exist).CurrentValues.SetValues(entity);
         return Task.CompletedTask;
     }
 
     public async Task UpdateListAsync(IEnumerable<T> entities)
     {
-        await _context.Set<T>().AddRangeAsync(entities);
+        await context.Set<T>().AddRangeAsync(entities);
     }
 
     public Task DeleteAsync(T entity)
     {
-        _context.Set<T>().Remove(entity);
+        context.Set<T>().Remove(entity);
         return Task.CompletedTask;
     }
 
     public Task DeleteListAsync(IEnumerable<T> entities)
     {
-        _context.Set<T>().RemoveRange(entities);
+        context.Set<T>().RemoveRange(entities);
         return Task.CompletedTask;
     }
 
     public Task<int> SaveChangesAsync()
     {
-        return _unitOfWork.CommitAsync();
+        return unitOfWork.CommitAsync();
     }
 
     public Task<IDbContextTransaction> BeginTransactionAsync()
     {
-        return _context.Database.BeginTransactionAsync();
+        return context.Database.BeginTransactionAsync();
     }
 
     public async Task EndTransactionAsync()
     {
         await SaveChangesAsync();
-        await _context.Database.CommitTransactionAsync();
+        await context.Database.CommitTransactionAsync();
     }
 
     public async Task RollbackTransactionAsync()
     {
-        await _context.Database.RollbackTransactionAsync();
+        await context.Database.RollbackTransactionAsync();
     }
 }
