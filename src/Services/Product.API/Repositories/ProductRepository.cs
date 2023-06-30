@@ -7,12 +7,8 @@ using Product.API.Repositories.Interfaces;
 
 namespace Product.API.Repositories;
 
-public class ProductRepository : RepositoryBaseAsync<CatalogProduct, int, ProductContext>, IProductRepository
+public class ProductRepository(ProductContext context, IUnitOfWork<ProductContext> unitOfWork) : RepositoryBaseAsync<CatalogProduct, int, ProductContext>(context, unitOfWork), IProductRepository
 {
-    public ProductRepository(ProductContext context, IUnitOfWork<ProductContext> unitOfWork) : base(context, unitOfWork)
-    {
-    }
-
     public async Task<IEnumerable<CatalogProduct>> GetProducts()
     {
         return await FindAll().ToListAsync();
