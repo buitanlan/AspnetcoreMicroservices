@@ -1,6 +1,5 @@
 ﻿using Product.API.Entities;
 using Serilog;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Product.API.Persistence;
 
