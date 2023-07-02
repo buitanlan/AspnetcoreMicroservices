@@ -6,6 +6,10 @@ namespace Product.API.Persistence;
 
 public class ProductContext(DbContextOptions<ProductContext> options) : DbContext(options)
 {
+
+    public DbSet<CatalogProduct> Products { get; set; }
+
+
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
     {
         var modified = ChangeTracker.Entries()
@@ -32,5 +36,12 @@ public class ProductContext(DbContextOptions<ProductContext> options) : DbContex
             }
         }
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<CatalogProduct>().HasIndex(x => x.No).IsUnique();
     }
 }

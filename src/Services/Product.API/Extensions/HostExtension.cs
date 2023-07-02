@@ -15,14 +15,14 @@ public static class HostExtensions
 
         try
         {
-            logger.LogInformation("Migrating mysql database");
+            logger.LogInformation("Migrating postgres database");
             ExecuteMigrations(context);
-            logger.LogInformation("Migrated mysql database");
+            logger.LogInformation("Migrated postgres database");
             InvokeSeeder(seeder!, context, services);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while migrating the mysql database");
+            logger.LogError(e, "An error occurred while migrating the postgres database");
         }
 
         return host;
