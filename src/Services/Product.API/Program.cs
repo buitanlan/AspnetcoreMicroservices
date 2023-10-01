@@ -3,7 +3,7 @@ using Product.API.Extensions;
 using Product.API.Persistence;
 using Serilog;
 
-var builder = WebApplication.CreateSlimBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 
     

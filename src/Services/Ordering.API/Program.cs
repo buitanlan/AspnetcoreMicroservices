@@ -1,7 +1,7 @@
 using Common.Logging;
 using Serilog;
 
-var builder = WebApplication.CreateSlimBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog(Serilogger.Configuration);
     
