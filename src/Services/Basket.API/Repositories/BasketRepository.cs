@@ -13,10 +13,12 @@ public class BasketRepository(IDistributedCache redisCacheService, ISerializeSer
         return string.IsNullOrEmpty(basket) ? null : serializeService.Deserialize<Cart>(basket);
     }
 
-    public async Task<Cart?> UpdateBasket(Cart cart, DistributedCacheEntryOptions options = null)
+    public async Task<Cart?> UpdateBasket(Cart cart, DistributedCacheEntryOptions? options)
     {
+        Log.Information($"BEGIN: Update Basket for{cart.Username}");
         options ??= new DistributedCacheEntryOptions();
         await redisCacheService.SetStringAsync(cart.Username, serializeService.Serialize(cart), options);
+        Log.Information($"END: Update Basket for{cart.Username}");
         return await GetBasketByUserName(cart.Username);
     }
 
@@ -24,7 +26,9 @@ public class BasketRepository(IDistributedCache redisCacheService, ISerializeSer
     {
         try
         {
+            Log.Information($"BEGIN: Delete Basket for {username}");
             await redisCacheService.RemoveAsync(username);
+            Log.Information($"END: Delete Basket for {username}");
             return true;
         }
         catch (Exception e)
