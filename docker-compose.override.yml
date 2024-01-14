@@ -37,9 +37,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
+      - "CacheSettings:ConnectionString=basketdb:6379"
     ports:
-      - "80"
-      - "443"
+      - "6003:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -180,4 +180,3 @@ services:
       - elasticsearch
     ports:
       - "5601:5601"
-    

@@ -15,7 +15,7 @@ services:
 
 
   basket.api:
-    image: ${DOCKER_REGISTRY-}basketapi
+    image: ${DOCKER_REGISTRY-}basket-api
     build:
       context: .
       dockerfile: src/Services/Basket.API/Dockerfile
@@ -108,4 +108,3 @@ volumes:
   pgadmin_data:
     name: pgadmin_data
   
-    
